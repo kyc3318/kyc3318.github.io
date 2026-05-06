@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<!--
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  郭元樵 · 個人作品集
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  使用說明
+  ────────
+  1. 這是一個獨立的 HTML 檔案,可直接部署到任何靜態空間
+     (GitHub Pages、Vercel、Netlify、自架伺服器都可以)。
+  2. 進入後台:在網址後面加 /#admin,或按 Ctrl+Shift+E (Mac: Cmd+Shift+E)
+  3. 預設密碼是 "ncu2025" — 請改成你自己的密碼
+     (在下方搜尋 ADMIN_PASSWORD)
+  4. 專題資料儲存在瀏覽器的 localStorage。記得用「匯出 JSON」做備份,
+     因為每個瀏覽器/裝置的資料是分開的。
+  5. 要修改你的姓名、簡介、聯絡方式,請直接編輯 HTML
+     (搜尋「請修改」即可定位)。
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-->
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>郭元樵 Teddy Kuo — 機械工程・材料研究</title>
+  <meta name="description" content="郭元樵 (Teddy Kuo) 的個人作品集 — 國立中央大學機械工程系,二維半導體材料研究。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #F4EFE3;
+      --bg-tint: #EDE7D6;
+      --ink: #1A1A1A;
+      --ink-2: #2D2D2A;
+      --muted: #807A6E;
+      --muted-2: #A8A192;
+      --gold: #9C7A3D;
+      --gold-soft: #C8A45C;
+      --hairline: rgba(26, 26, 26, 0.14);
+      --hairline-strong: rgba(26, 26, 26, 0.32);
+      --paper-shadow: rgba(60, 50, 30, 0.06);
+
+      --admin-bg: #15161A;
+      --admin-fg: #F4EFE3;
+      --admin-border: rgba(244, 239, 227, 0.12);
+      --admin-input: #1F2025;
+
+      --tc-serif: "Noto Serif TC", "Fraunces", Georgia, serif;
+      --en-serif: "Fraunces", "Noto Serif TC", Georgia, serif;
+      --tc-sans: "IBM Plex Sans", "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+      --pad-x: clamp(24px, 5vw, 80px);
+      --section-gap: clamp(80px, 14vh, 160px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--tc-sans);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 紙質紋理 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      mix-blend-mode: multiply;
+      opacity: 0.5;
+      z-index: 1000;
+    }
+
+    a { color: inherit; text-decoration: none; transition: color .2s; }
+    button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad-x);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─────────── 頁首 ─────────── */
+    header.site-header {
+      padding: 28px var(--pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--hairline);
+      position: relative;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .brand-mark {
+      width: 28px; height: 28px;
+      border: 1.5px solid var(--ink);
+      display: inline-grid;
+      place-items: center;
+      font-family: var(--en-serif);
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0;
+      transform: rotate(-2deg);
+    }
+    .brand-zh {
+      font-family: var(--tc-serif);
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    nav.site-nav { display: flex; gap: 36px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; }
+    nav.site-nav a {
+      color: var(--ink); position: relative; padding-bottom: 4px;
+      font-family: var(--tc-sans);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+    }
+    nav.site-nav a::after {
+      content: ""; position: absolute; left: 0; right: 100%; bottom: 0;
+      height: 1px; background: var(--gold); transition: right .3s ease;
+    }
+    nav.site-nav a:hover::after { right: 0; }
+    .header-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-align: right;
+    }
+    .header-meta div { font-family: var(--tc-sans); font-size: 12px; letter-spacing: 0.1em; }
+    .header-meta div + div { margin-top: 2px; }
+
+    /* ─────────── 主視覺 ─────────── */
+    .hero {
+      padding: clamp(60px, 12vh, 140px) var(--pad-x) clamp(80px, 14vh, 160px);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+    }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .hero-eyebrow::before {
+      content: ""; width: 36px; height: 1px; background: var(--ink);
+    }
+    .hero h1 {
+      font-family: var(--tc-serif);
+      font-weight: 500;
+      font-size: clamp(64px, 10vw, 144px);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+    .hero h1 .en {
+      display: block;
+      font-family: var(--en-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 0.28em;
+      letter-spacing: 0;
+      color: var(--ink-2);
+      margin-top: 24px;
+      font-variation-settings: "opsz" 72, "SOFT" 60;
+    }
+    .hero h1 .accent {
+      color: var(--gold);
+    }
+    .hero-right {
+      padding-bottom: 12px;
+    }
+    .hero-tagline {
+      font-family: var(--tc-serif);
+      font-size: clamp(20px, 2.4vw, 28px);
+      line-height: 1.6;
+      color: var(--ink-2);
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+    .hero-tagline strong {
+      font-weight: 600;
+      color: var(--ink);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 1px;
+    }
+    .hero-bio {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--ink-2);
+      max-width: 480px;
+      font-weight: 400;
+    }
+
+    .hex-art {
+      position: absolute;
+      right: -80px;
+      top: 12%;
+      width: 320px;
+      height: 320px;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .hex-art { display: none; }
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    /* ─────────── 章節抬頭 ─────────── */
+    .section {
+      padding: var(--section-gap) 0;
+      border-top: 1px solid var(--hairline);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+      align-items: baseline;
+    }
+    .section-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .section-num span.cn {
+      font-family: var(--tc-sans);
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: none;
+    }
+    .section-title {
+      font-family: var(--tc-serif);
+      font-weight: 500;
+      font-size: clamp(36px, 5.5vw, 68px);
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    @media (max-width: 700px) {
+      .section-head { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    /* ─────────── 關於 ─────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+    }
+    .about-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .about-meta dt {
+      color: var(--muted-2);
+      margin-top: 14px;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+    }
+    .about-meta dt:first-child { margin-top: 0; }
+    .about-meta dd {
+      color: var(--ink);
+      font-family: var(--tc-sans);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+    .about-body {
+      max-width: 680px;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--ink-2);
+      font-weight: 400;
+    }
+    .about-body p + p { margin-top: 1.2em; }
+    .about-body strong { font-weight: 600; color: var(--ink); border-bottom: 1px solid var(--gold); }
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; gap: 30px; }
+    }
+
+    /* ─────────── 專題 ─────────── */
+    .projects-list { display: flex; flex-direction: column; }
+    .project {
+      border-top: 1px solid var(--hairline);
+      padding: 48px 0;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+      transition: padding .25s ease;
+    }
+    .project:hover { background: linear-gradient(to right, transparent, rgba(156,122,61,0.04) 30%, transparent); }
+    .project:last-child { border-bottom: 1px solid var(--hairline); }
+    .project-meta {
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.9;
+      letter-spacing: 0.05em;
+    }
+    .project-num {
+      font-family: var(--en-serif);
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-style: italic;
+      font-variation-settings: "opsz" 72, "SOFT" 50;
+    }
+    .project-year {
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+    }
+    .project-role { color: var(--muted); }
+
+    .project-content { min-width: 0; }
+    .project-title-zh {
+      font-family: var(--tc-serif);
+      font-size: clamp(24px, 3vw, 34px);
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: 0.03em;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .project-title-en {
+      font-family: var(--en-serif);
+      font-style: italic;
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 22px;
+      font-weight: 300;
+      letter-spacing: 0;
+    }
+    .project-summary {
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--ink-2);
+      max-width: 660px;
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .tag {
+      font-family: var(--tc-sans);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      padding: 6px 12px;
+      border: 1px solid var(--hairline-strong);
+      color: var(--ink-2);
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .project-toggle {
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gold);
+      transition: opacity .2s, letter-spacing .3s;
+      font-weight: 500;
+    }
+    .project-toggle:hover { letter-spacing: 0.25em; }
+    .project-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .5s cubic-bezier(.16,1,.3,1), margin-top .3s;
+      margin-top: 0;
+    }
+    .project.expanded .project-detail {
+      max-height: 4000px;
+      margin-top: 32px;
+    }
+    .project-detail-inner {
+      padding: 28px 0 8px;
+      border-top: 1px solid var(--hairline);
+      max-width: 720px;
+    }
+    .project-detail h4 {
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      margin-top: 32px;
+    }
+    .project-detail h4:first-child { margin-top: 0; }
+    .project-detail p {
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--ink-2);
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+    .project-detail ul { padding-left: 20px; margin: 8px 0; }
+    .project-detail li {
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--ink-2);
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .project-detail strong { color: var(--ink); font-weight: 600; }
+    .project-detail .links {
+      margin-top: 24px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .project-detail .links a {
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--ink);
+      border-bottom: 1px solid var(--hairline-strong);
+      padding-bottom: 4px;
+      font-weight: 500;
+    }
+    .project-detail .links a:hover { color: var(--gold); border-color: var(--gold); }
+
+    @media (max-width: 700px) {
+      .project { grid-template-columns: 1fr; gap: 16px; padding: 36px 0; }
+      .project-num { font-size: 24px; margin-bottom: 8px; }
+    }
+
+    .projects-empty {
+      padding: 80px 0;
+      text-align: center;
+      color: var(--muted);
+      font-family: var(--tc-sans);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─────────── 聯絡 / 頁尾 ─────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .contact-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 32px;
+      max-width: 800px;
+    }
+    .contact-list li dt {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .contact-list li dd {
+      font-family: var(--en-serif);
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+    }
+    .contact-list li dd a:hover { color: var(--gold); }
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    footer.site-footer {
+      border-top: 1px solid var(--hairline);
+      padding: 32px var(--pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    footer.site-footer .credit-zh {
+      font-family: var(--tc-serif);
+      letter-spacing: 0.2em;
+      font-weight: 500;
+    }
+
+    /* ─────────── 後台 ─────────── */
+    .admin-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 12, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 5vh 24px;
+      overflow-y: auto;
+    }
+    .admin-overlay.open { display: flex; }
+    .admin-panel {
+      width: 100%;
+      max-width: 880px;
+      background: var(--admin-bg);
+      color: var(--admin-fg);
+      border: 1px solid var(--admin-border);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      font-family: var(--tc-sans);
+    }
+    .admin-head {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--admin-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .admin-head h2 {
+      font-family: var(--tc-serif);
+      font-weight: 500;
+      font-size: 24px;
+      letter-spacing: 0.05em;
+    }
+    .admin-head h2 .accent { color: var(--gold-soft); }
+    .admin-close {
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--muted-2);
+      padding: 6px 10px;
+      border: 1px solid var(--admin-border);
+    }
+    .admin-close:hover { color: var(--admin-fg); border-color: var(--gold-soft); }
+
+    .admin-body { padding: 32px; }
+
+    .admin-login p {
+      font-size: 14px;
+      color: var(--muted-2);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .admin-login form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .admin-input,
+    .admin-textarea,
+    .admin-select {
+      flex: 1;
+      background: var(--admin-input);
+      border: 1px solid var(--admin-border);
+      color: var(--admin-fg);
+      padding: 12px 14px;
+      font-family: var(--tc-sans);
+      font-size: 14px;
+      transition: border-color .15s;
+    }
+    .admin-input:focus, .admin-textarea:focus {
+      outline: none;
+      border-color: var(--gold-soft);
+    }
+    .admin-textarea { width: 100%; resize: vertical; min-height: 80px; line-height: 1.65; font-family: var(--tc-sans); }
+    .admin-textarea.code { font-family: var(--mono); font-size: 12px; line-height: 1.55; }
+    .admin-btn {
+      background: var(--gold-soft);
+      color: var(--admin-bg);
+      border: 1px solid var(--gold-soft);
+      padding: 12px 22px;
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      font-weight: 500;
+    }
+    .admin-btn:hover { background: transparent; color: var(--gold-soft); }
+    .admin-btn.ghost {
+      background: transparent;
+      color: var(--admin-fg);
+      border-color: var(--admin-border);
+    }
+    .admin-btn.ghost:hover { border-color: var(--gold-soft); color: var(--gold-soft); }
+    .admin-btn.danger { background: transparent; color: #E08989; border-color: rgba(224,137,137,0.3); }
+    .admin-btn.danger:hover { background: rgba(224,137,137,0.1); }
+
+    .admin-error {
+      color: #E08989;
+      font-size: 13px;
+      font-family: var(--tc-sans);
+      letter-spacing: 0.05em;
+      margin-top: 12px;
+      min-height: 18px;
+    }
+
+    .admin-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .admin-list { display: flex; flex-direction: column; }
+    .admin-row {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 18px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--admin-border);
+      align-items: center;
+    }
+    .admin-row .yr {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted-2);
+      letter-spacing: 0.05em;
+    }
+    .admin-row .ttl {
+      font-family: var(--tc-serif);
+      font-size: 17px;
+      font-weight: 500;
+    }
+    .admin-row .sub {
+      font-size: 12px;
+      color: var(--muted-2);
+      margin-top: 2px;
+    }
+    .admin-row-actions { display: flex; gap: 6px; }
+    .admin-row-actions button {
+      font-family: var(--tc-sans);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted-2);
+      padding: 6px 10px;
+      border: 1px solid var(--admin-border);
+      transition: all .15s;
+    }
+    .admin-row-actions button:hover { color: var(--gold-soft); border-color: var(--gold-soft); }
+    .admin-row-actions button.del:hover { color: #E08989; border-color: rgba(224,137,137,0.5); }
+
+    .admin-form { display: flex; flex-direction: column; gap: 18px; }
+    .admin-field { display: flex; flex-direction: column; gap: 6px; }
+    .admin-field label {
+      font-family: var(--tc-sans);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--muted-2);
+      font-weight: 500;
+    }
+    .admin-field .hint {
+      font-size: 11px;
+      color: var(--muted-2);
+      letter-spacing: 0;
+      margin-top: 2px;
+      line-height: 1.6;
+    }
+    .admin-field .hint code {
+      font-family: var(--mono);
+      background: var(--admin-input);
+      padding: 1px 5px;
+      font-size: 10.5px;
+    }
+    .admin-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 600px) {
+      .admin-field-row { grid-template-columns: 1fr; }
+      .admin-row { grid-template-columns: 1fr; }
+      .admin-row-actions { justify-content: flex-end; }
+    }
+
+    .admin-form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 24px;
+      border-top: 1px solid var(--admin-border);
+    }
+
+    .admin-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--admin-bg);
+      color: var(--admin-fg);
+      padding: 12px 22px;
+      font-family: var(--tc-sans);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--gold-soft);
+      z-index: 3000;
+      transition: transform .3s ease;
+    }
+    .admin-toast.show { transform: translateX(-50%) translateY(0); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero h1, .hero-tagline, .hero-bio, .hero-eyebrow, .header-meta {
+      animation: rise .9s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .hero-eyebrow { animation-delay: 0s; }
+    .hero h1 { animation-delay: .1s; }
+    .hero-tagline { animation-delay: .25s; }
+    .hero-bio { animation-delay: .35s; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════
+       頁首  ·  請修改:LOGO 縮寫、姓名
+       ════════════════════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">TK</span>
+      <span class="brand-zh">郭元樵</span>
+    </div>
+    <nav class="site-nav">
+      <a href="#about">關於</a>
+      <a href="#projects">作品</a>
+      <a href="#contact">聯絡</a>
+    </nav>
+    <div class="header-meta">
+      <div>台北· 台灣</div>
+      <div>UC Irvine · 2026 / 9</div>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════════
+       主視覺  ·  請修改:姓名、簡介
+       ════════════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <svg class="hex-art" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.6">
+      <g transform="translate(100,100)">
+        <g id="hex">
+          <polygon points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10" fill="none"/>
+        </g>
+        <use href="#hex" transform="translate(34.64,0)"/>
+        <use href="#hex" transform="translate(-34.64,0)"/>
+        <use href="#hex" transform="translate(17.32,-30)"/>
+        <use href="#hex" transform="translate(-17.32,-30)"/>
+        <use href="#hex" transform="translate(17.32,30)"/>
+        <use href="#hex" transform="translate(-17.32,30)"/>
+        <use href="#hex" transform="translate(0,-60)"/>
+        <use href="#hex" transform="translate(0,60)"/>
+        <use href="#hex" transform="translate(34.64,-60)"/>
+        <use href="#hex" transform="translate(-34.64,-60)"/>
+        <use href="#hex" transform="translate(34.64,60)"/>
+        <use href="#hex" transform="translate(-34.64,60)"/>
+        <use href="#hex" transform="translate(51.96,-30)"/>
+        <use href="#hex" transform="translate(-51.96,-30)"/>
+        <use href="#hex" transform="translate(51.96,30)"/>
+        <use href="#hex" transform="translate(-51.96,30)"/>
+        <use href="#hex" transform="translate(69.28,0)"/>
+        <use href="#hex" transform="translate(-69.28,0)"/>
+        <circle cx="0" cy="0" r="2" fill="currentColor"/>
+        <circle cx="34.64" cy="0" r="2" fill="currentColor"/>
+        <circle cx="-34.64" cy="0" r="2" fill="currentColor"/>
+        <circle cx="17.32" cy="30" r="2" fill="currentColor"/>
+      </g>
+    </svg>
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-eyebrow">作品集 · 二〇二六</div>
+        <h1>
+          郭元樵<span class="accent">。</span>
+          <span class="en">Teddy Kuo.</span>
+        </h1>
+      </div>
+      <div class="hero-right">
+        <p class="hero-tagline">
+          機械工程系大學生,
+          專注於<strong>二維半導體材料</strong>的合成研究 ——
+          在物理、化學與工程製程的交界處探索。
+        </p>
+        <p class="hero-bio">
+          國立中央大學機械系四年級在學中,2026 年 9 月將前往美國 UC Irvine
+          參加 ASAP 學分學程。目前在蘇清源教授實驗室研究 MoS₂ 薄膜合成,
+          興趣涵蓋材料科學、財務,以及兩者之間。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       關於  ·  請修改
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-num">§ 01 — <span class="cn">關於</span></div>
+        <h2 class="section-title">一些 <em>自介</em>。</h2>
+      </div>
+      <div class="about-grid">
+        <dl class="about-meta">
+          <dt>領域</dt>
+          <dd>機械工程</dd>
+          <dt>研究方向</dt>
+          <dd>二維材料 · 半導體</dd>
+          <dt>就讀學校</dt>
+          <dd>國立中央大學</dd>
+          <dt>下一站</dt>
+          <dd>UC Irvine — ASAP 學程 · 2026</dd>
+          <dt>使用語言</dt>
+          <dd>中文 · 英文</dd>
+        </dl>
+        <div class="about-body">
+          <p>
+            我是機械工程系四年級學生,研究方向為<strong>低維度半導體材料</strong>,
+            目前專注於以金薄膜輔助 CVD 製程合成單層 MoS₂。我喜歡介於物理、
+            化學與工程製程之間的問題 —— 那些需要同時懂材料、懂機台,
+            還要懂耐心的問題。
+          </p>
+          <p>
+            實驗室之外,我正在準備赴美讀研究所、加強英文 (TOEFL 重考中),
+            也正在學習程式設計。我關心個人理財與投資,
+            也常思考什麼是好研究題目、好專題,以及怎麼做出好作品集。這個網站就是我對這些問題的嘗試性回答之一。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       作品  ·  由 JavaScript 動態渲染,進入後台編輯
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-num">§ 02 — <span class="cn">精選作品</span></div>
+        <h2 class="section-title">研究與 <em>專題</em>。</h2>
+      </div>
+      <div class="projects-list" id="projects-list">
+        <!-- JS 動態填入 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       聯絡  ·  請修改:Email、GitHub、LinkedIn
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-num">§ 03 — <span class="cn">聯絡</span></div>
+        <h2 class="section-title">保持 <em>聯繫</em>。</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="section-num" style="opacity:0.7">
+          <span class="cn">目前位於<br>桃園・中壢</span>
+        </div>
+        <ul class="contact-list">
+          <li>
+            <dt>EMAIL</dt>
+            <dd><a href="mailto:kyc3318@gmail.com">kyc3318@gmail.com</a></dd>
+          </li>
+          <li>
+            <dt>GITHUB</dt>
+            <dd><a href="https://github.com/kyc3318" target="_blank" rel="noopener">https://github.com/kyc3318</a></dd>
+          </li>
+          <li>
+            <dt>LINKEDIN</dt>
+            <dd><a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">/in/teddy-kuo</a></dd>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>© 2026 <span class="credit-zh">郭元樵</span> · Teddy Kuo</div>
+    <div>手作網頁 · 最後更新 <span id="last-updated">—</span></div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════════
+       後台彈窗
+       ════════════════════════════════════════════════════════════ -->
+  <div class="admin-overlay" id="admin-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="admin-panel">
+      <div class="admin-head">
+        <h2>編輯後台 <span class="accent">·</span> <span style="font-family:var(--mono);font-size:12px;letter-spacing:0.15em;color:var(--muted-2);font-weight:400;">CONTROL</span></h2>
+        <button class="admin-close" id="admin-close-btn">關閉 · Esc</button>
+      </div>
+      <div class="admin-body" id="admin-body">
+        <!-- 切換登入 / 列表 / 表單 -->
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="admin-toast">已儲存</div>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════════
+  // 設定
+  // ═══════════════════════════════════════════════════════════════
+  // 把這裡改成你自己的密碼。
+  // 注意:這只是用來阻擋一般瀏覽者的簡單防線,並非真正的加密。
+  // 請勿在這個網站存放敏感資料。
+  const ADMIN_PASSWORD = "teddy5333";
+
+  const STORAGE_KEY = "teddy_portfolio_projects_v1";
+
+  // ═══════════════════════════════════════════════════════════════
+  // 預設專題(首次進站時載入)
+  // ═══════════════════════════════════════════════════════════════
+  const DEFAULT_PROJECTS = [
+    {
+      id: "mos2-cvd-2026",
+      year: "2024 — 2026",
+      title: "低維度半導體材料之合成與研究",
+      titleZh: "Synthesis & Research of Low-Dimensional Semiconductor Materials",
+      role: "大學部專題研究 · 4 人團隊",
+      institution: "國立中央大學 · 機械工程學系",
+      advisor: "指導教授:蘇清源",
+      tags: ["二維材料", "MoS₂", "化學氣相沉積", "半導體", "材料科學", "拉曼 / PL 分析"],
+      summary: "以金薄膜輔助化學氣相沉積 (CVD) 法,在矽基板上合成大面積、高結晶性的單層 MoS₂ 薄膜 —— 在摩爾定律逼近物理極限之際,二維半導體材料是下世代電晶體通道的關鍵候選。",
+      sections: [
+        {
+          title: "研究背景",
+          body: "半導體製程持續微縮已逐漸逼近矽基電晶體的物理極限。二維過渡金屬二硫族化物 (TMDC) 中的 MoS₂,因其高電子遷移率與弱電荷屏蔽效應,被視為下世代電晶體通道的關鍵候選材料。然而,要在晶圓尺度上可控地合成低缺陷、單晶 MoS₂ 薄膜,仍是目前未解的工藝挑戰之一。"
+        },
+        {
+          title: "實驗方法",
+          body: "我們在前驅物與退火步驟之間引入一層 50 nm 的金薄膜,作為生長促進劑,並抑制 (NH₄)₂MoS₄ 與 Na₂MoO₄ 混合溶液在退火過程中的提早揮發。CVD 退火完成後再蝕刻金層,留下純 MoS₂ 薄膜進行後續分析。\n\n完整流程:基板清潔 → 氧電漿處理(親水化)→ 旋轉塗佈混合前驅物 → 鍍金 50 nm → CVD 退火 (Ar/H₂ 氣氛) → 蝕金 → 光學顯微鏡 / 拉曼 / PL 分析"
+        },
+        {
+          title: "關鍵成果",
+          body: "歷經兩輪實驗、約 60 組樣品比對,(NH₄)₂MoS₄ + Na₂MoO₄ 混合溶液的表現穩定優於純 (NH₄)₂MoS₄。最佳薄膜參數:\n\n• Mo:S 比例 1:2.5\n• 退火溫度 600 °C、持溫時間 30 分鐘\n• Ar:H₂ 氣氛比例 65:35 至 50:50 sccm\n\n拉曼光譜中 E₂g–A₁g 峰間距收斂於約 21 cm⁻¹(與單層 MoS₂ 一致),PL 峰位於約 1.85 eV、最佳樣品 FWHM 低至 43 meV —— 顯示低缺陷密度與良好的結晶性。"
+        },
+        {
+          title: "後續工作",
+          body: "下一階段聚焦於 Mo:S = 1:2.5、30 分鐘退火條件,測試三種 Ar:H₂ 比例 (65:35、57.5:42.5、50:50)。同時嘗試以微影製作金薄膜方塊陣列,讓反應副產物可從陣列間隙逸出 —— 解決第二輪實驗中部分大面積薄膜雖然覆蓋率高、但拉曼訊號卻不佳的問題。"
+        }
+      ],
+      links: []
+    }
+  ];
+
+  // ═══════════════════════════════════════════════════════════════
+  // 狀態
+  // ═══════════════════════════════════════════════════════════════
+  let projects = loadProjects();
+  let isAuthed = false;
+
+  function loadProjects() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [...DEFAULT_PROJECTS];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [...DEFAULT_PROJECTS];
+      return parsed;
+    } catch (e) {
+      return [...DEFAULT_PROJECTS];
+    }
+  }
+  function saveProjects() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    } catch (e) {
+      toast("儲存失敗:空間不足?");
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // 渲染專題列表
+  // ═══════════════════════════════════════════════════════════════
+  function escapeHtml(s) {
+    if (s == null) return "";
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+  function paragraphs(text) {
+    if (!text) return "";
+    return text.split(/\n\n+/).map(block => {
+      const lines = block.split("\n");
+      if (lines.every(l => l.trim().startsWith("•") || l.trim().startsWith("-") || l.trim() === "")) {
+        const items = lines.filter(l => l.trim()).map(l => `<li>${escapeHtml(l.replace(/^[\s•\-]+/, ""))}</li>`).join("");
+        return `<ul>${items}</ul>`;
+      }
+      return `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`;
+    }).join("");
+  }
+
+  function renderProjects() {
+    const list = document.getElementById("projects-list");
+    if (!projects.length) {
+      list.innerHTML = `<div class="projects-empty">目前還沒有作品 —— 請從後台新增。</div>`;
+      return;
+    }
+    list.innerHTML = projects.map((p, i) => {
+      const num = String(i + 1).padStart(2, "0");
+      const tags = (p.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
+      const sections = (p.sections || []).map(s => `
+        <h4>${escapeHtml(s.title)}</h4>
+        ${paragraphs(s.body)}
+      `).join("");
+      const links = (p.links || []).filter(l => l && l.url).map(l => `
+        <a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.label || l.url)} ↗</a>
+      `).join("");
+      return `
+        <article class="project" data-id="${escapeHtml(p.id)}">
+          <div class="project-meta">
+            <div class="project-num">${num}</div>
+            <span class="project-year">${escapeHtml(p.year || "")}</span>
+            ${p.role ? `<span class="project-role">${escapeHtml(p.role)}</span><br>` : ""}
+            ${p.institution ? `<span class="project-role">${escapeHtml(p.institution)}</span><br>` : ""}
+            ${p.advisor ? `<span class="project-role">${escapeHtml(p.advisor)}</span>` : ""}
+          </div>
+          <div class="project-content">
+            <h3 class="project-title-zh">${escapeHtml(p.title || "未命名")}</h3>
+            ${p.titleZh ? `<div class="project-title-en">${escapeHtml(p.titleZh)}</div>` : ""}
+            ${p.summary ? `<p class="project-summary">${escapeHtml(p.summary)}</p>` : ""}
+            ${tags ? `<div class="project-tags">${tags}</div>` : ""}
+            ${sections || links ? `
+              <button class="project-toggle" data-toggle>展開閱讀 →</button>
+              <div class="project-detail">
+                <div class="project-detail-inner">
+                  ${sections}
+                  ${links ? `<div class="links">${links}</div>` : ""}
+                </div>
+              </div>
+            ` : ""}
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    list.querySelectorAll("[data-toggle]").forEach(btn => {
+      btn.addEventListener("click", e => {
+        const article = btn.closest(".project");
+        const expanded = article.classList.toggle("expanded");
+        btn.textContent = expanded ? "收合 ↑" : "展開閱讀 →";
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // 後台
+  // ═══════════════════════════════════════════════════════════════
+  const overlay = document.getElementById("admin-overlay");
+  const adminBody = document.getElementById("admin-body");
+
+  function openAdmin() {
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
+    if (isAuthed) renderDashboard();
+    else renderLogin();
+  }
+  function closeAdmin() {
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+    if (window.location.hash === "#admin") {
+      history.replaceState(null, "", window.location.pathname);
+    }
+  }
+
+  function renderLogin(errorMsg) {
+    adminBody.innerHTML = `
+      <div class="admin-login">
+        <p>請輸入密碼以管理作品內容。按 <strong style="color:var(--gold-soft)">Esc</strong> 可關閉。</p>
+        <form id="login-form">
+          <input type="password" class="admin-input" id="pw-input" placeholder="密碼" autocomplete="current-password" autofocus>
+          <button type="submit" class="admin-btn">解鎖</button>
+        </form>
+        <div class="admin-error">${errorMsg || ""}</div>
+      </div>
+    `;
+    document.getElementById("login-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const v = document.getElementById("pw-input").value;
+      if (v === ADMIN_PASSWORD) {
+        isAuthed = true;
+        renderDashboard();
+      } else {
+        renderLogin("密碼錯誤。");
+      }
+    });
+  }
+
+  function renderDashboard() {
+    const rows = projects.map((p, i) => `
+      <div class="admin-row">
+        <div class="yr">${escapeHtml(p.year || "—")}</div>
+        <div>
+          <div class="ttl">${escapeHtml(p.title || "未命名")}</div>
+          <div class="sub">${escapeHtml(p.titleZh || (p.summary ? p.summary.slice(0, 80) : ""))}</div>
+        </div>
+        <div class="admin-row-actions">
+          <button data-edit="${i}">編輯</button>
+          <button data-up="${i}" ${i === 0 ? "disabled style='opacity:0.3'" : ""}>↑</button>
+          <button data-down="${i}" ${i === projects.length - 1 ? "disabled style='opacity:0.3'" : ""}>↓</button>
+          <button class="del" data-del="${i}">刪除</button>
+        </div>
+      </div>
+    `).join("");
+
+    adminBody.innerHTML = `
+      <div class="admin-toolbar">
+        <button class="admin-btn" id="new-proj-btn">+ 新增作品</button>
+        <button class="admin-btn ghost" id="export-btn">匯出 JSON</button>
+        <button class="admin-btn ghost" id="import-btn">匯入 JSON</button>
+        <button class="admin-btn ghost" id="reset-btn" style="margin-left:auto">還原預設</button>
+        <button class="admin-btn ghost" id="logout-btn">登出</button>
+      </div>
+      <div class="admin-list">${rows || '<p style="color:var(--muted-2);font-size:14px;padding:20px 0;">目前還沒有作品。點選「新增作品」開始。</p>'}</div>
+      <input type="file" id="import-file" accept="application/json" style="display:none">
+    `;
+
+    document.getElementById("new-proj-btn").addEventListener("click", () => renderForm(null));
+    document.getElementById("export-btn").addEventListener("click", exportJSON);
+    document.getElementById("import-btn").addEventListener("click", () => document.getElementById("import-file").click());
+    document.getElementById("import-file").addEventListener("change", importJSON);
+    document.getElementById("reset-btn").addEventListener("click", resetDefaults);
+    document.getElementById("logout-btn").addEventListener("click", () => { isAuthed = false; renderLogin(); });
+
+    adminBody.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => renderForm(parseInt(b.dataset.edit, 10))));
+    adminBody.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => deleteProject(parseInt(b.dataset.del, 10))));
+    adminBody.querySelectorAll("[data-up]").forEach(b => b.addEventListener("click", () => moveProject(parseInt(b.dataset.up, 10), -1)));
+    adminBody.querySelectorAll("[data-down]").forEach(b => b.addEventListener("click", () => moveProject(parseInt(b.dataset.down, 10), 1)));
+  }
+
+  function renderForm(index) {
+    const p = index === null ? {
+      id: "proj-" + Date.now(),
+      year: "",
+      title: "",
+      titleZh: "",
+      role: "",
+      institution: "",
+      advisor: "",
+      tags: [],
+      summary: "",
+      sections: [],
+      links: []
+    } : { ...projects[index] };
+
+    const sectionsJSON = JSON.stringify(p.sections || [], null, 2);
+    const linksJSON = JSON.stringify(p.links || [], null, 2);
+    const tagsString = (p.tags || []).join(", ");
+
+    adminBody.innerHTML = `
+      <form class="admin-form" id="proj-form">
+        <div class="admin-field">
+          <label>作品名稱 (中文)</label>
+          <input class="admin-input" name="title" value="${escapeHtml(p.title)}" required>
+        </div>
+        <div class="admin-field">
+          <label>作品名稱 (英文 / 副標,選填)</label>
+          <input class="admin-input" name="titleZh" value="${escapeHtml(p.titleZh)}">
+        </div>
+        <div class="admin-field-row">
+          <div class="admin-field">
+            <label>年份 / 期間</label>
+            <input class="admin-input" name="year" value="${escapeHtml(p.year)}" placeholder="例如 2024 — 2025">
+          </div>
+          <div class="admin-field">
+            <label>擔任角色</label>
+            <input class="admin-input" name="role" value="${escapeHtml(p.role)}" placeholder="例如 專題研究員">
+          </div>
+        </div>
+        <div class="admin-field-row">
+          <div class="admin-field">
+            <label>學校 / 單位</label>
+            <input class="admin-input" name="institution" value="${escapeHtml(p.institution)}">
+          </div>
+          <div class="admin-field">
+            <label>指導教授 / 帶領人(選填)</label>
+            <input class="admin-input" name="advisor" value="${escapeHtml(p.advisor)}">
+          </div>
+        </div>
+        <div class="admin-field">
+          <label>標籤(用逗號分隔)</label>
+          <input class="admin-input" name="tags" value="${escapeHtml(tagsString)}">
+        </div>
+        <div class="admin-field">
+          <label>簡短摘要</label>
+          <textarea class="admin-textarea" name="summary" rows="3">${escapeHtml(p.summary)}</textarea>
+          <span class="hint">顯示在作品卡片上,建議 1–3 句話。</span>
+        </div>
+        <div class="admin-field">
+          <label>詳細內容區塊 (JSON 格式)</label>
+          <textarea class="admin-textarea code" name="sections" rows="10">${escapeHtml(sectionsJSON)}</textarea>
+          <span class="hint">格式:<code>[{"title":"研究背景","body":"內文..."},{"title":"成果","body":"..."}]</code><br>內文中用 <code>\\n\\n</code> 分段;以 • 開頭的行會自動轉為條列。</span>
+        </div>
+        <div class="admin-field">
+          <label>外部連結 (JSON 格式,選填)</label>
+          <textarea class="admin-textarea code" name="links" rows="5">${escapeHtml(linksJSON)}</textarea>
+          <span class="hint">格式:<code>[{"label":"PDF 報告","url":"https://..."}]</code></span>
+        </div>
+        <div class="admin-error" id="form-error"></div>
+        <div class="admin-form-actions">
+          <button type="submit" class="admin-btn">${index === null ? "新增" : "儲存"}</button>
+          <button type="button" class="admin-btn ghost" id="cancel-btn">取消</button>
+        </div>
+      </form>
+    `;
+
+    document.getElementById("cancel-btn").addEventListener("click", renderDashboard);
+    document.getElementById("proj-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const errEl = document.getElementById("form-error");
+      let sections, links;
+      try {
+        sections = JSON.parse(fd.get("sections") || "[]");
+        if (!Array.isArray(sections)) throw new Error("Sections 必須是陣列");
+      } catch (err) {
+        errEl.textContent = "詳細內容 JSON 格式錯誤:" + err.message;
+        return;
+      }
+      try {
+        links = JSON.parse(fd.get("links") || "[]");
+        if (!Array.isArray(links)) throw new Error("Links 必須是陣列");
+      } catch (err) {
+        errEl.textContent = "外部連結 JSON 格式錯誤:" + err.message;
+        return;
+      }
+      const updated = {
+        id: p.id,
+        year: fd.get("year").trim(),
+        title: fd.get("title").trim(),
+        titleZh: fd.get("titleZh").trim(),
+        role: fd.get("role").trim(),
+        institution: fd.get("institution").trim(),
+        advisor: fd.get("advisor").trim(),
+        tags: fd.get("tags").split(",").map(t => t.trim()).filter(Boolean),
+        summary: fd.get("summary").trim(),
+        sections,
+        links
+      };
+      if (index === null) projects.push(updated);
+      else projects[index] = updated;
+      saveProjects();
+      renderProjects();
+      toast(index === null ? "作品已新增" : "已儲存");
+      renderDashboard();
+    });
+  }
+
+  function deleteProject(i) {
+    if (!confirm("確定要刪除作品「" + (projects[i].title || "未命名") + "」?")) return;
+    projects.splice(i, 1);
+    saveProjects();
+    renderProjects();
+    renderDashboard();
+    toast("已刪除");
+  }
+  function moveProject(i, dir) {
+    const j = i + dir;
+    if (j < 0 || j >= projects.length) return;
+    [projects[i], projects[j]] = [projects[j], projects[i]];
+    saveProjects();
+    renderProjects();
+    renderDashboard();
+  }
+
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(projects, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const date = new Date().toISOString().slice(0, 10);
+    a.download = `portfolio-projects-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast("已匯出");
+  }
+  function importJSON(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!Array.isArray(data)) throw new Error("檔案格式須為陣列");
+        if (!confirm("確定要用匯入的資料覆蓋全部作品?(共 " + data.length + " 筆)")) return;
+        projects = data;
+        saveProjects();
+        renderProjects();
+        renderDashboard();
+        toast("已匯入");
+      } catch (err) {
+        toast("匯入失敗:" + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  }
+  function resetDefaults() {
+    if (!confirm("確定要還原成預設作品?目前的編輯內容將會消失(可先匯出備份)。")) return;
+    projects = [...DEFAULT_PROJECTS];
+    saveProjects();
+    renderProjects();
+    renderDashboard();
+    toast("已還原");
+  }
+
+  let toastTimer;
+  function toast(msg) {
+    const t = document.getElementById("admin-toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // 事件綁定
+  // ═══════════════════════════════════════════════════════════════
+  document.getElementById("admin-close-btn").addEventListener("click", closeAdmin);
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeAdmin(); });
+  document.addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "E" || e.key === "e")) {
+      e.preventDefault();
+      openAdmin();
+    }
+    if (e.key === "Escape" && overlay.classList.contains("open")) closeAdmin();
+  });
+  function checkHash() {
+    if (window.location.hash === "#admin") openAdmin();
+  }
+  window.addEventListener("hashchange", checkHash);
+
+  const stamp = new Date().toLocaleDateString("zh-TW", { year: "numeric", month: "long" });
+  document.getElementById("last-updated").textContent = stamp;
+
+  // ═══════════════════════════════════════════════════════════════
+  // 初始化
+  // ═══════════════════════════════════════════════════════════════
+  renderProjects();
+  checkHash();
+  </script>
+</body>
+</html>
